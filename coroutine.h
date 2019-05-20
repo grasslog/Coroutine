@@ -17,5 +17,3 @@ void coroutine_resume(struct schedule *, int fd);
 int coroutine_status(struct schedule *, int fd);
 int coroutine_running(struct schedule *);
 void coroutine_yield(struct schedule *);
-
-#endif

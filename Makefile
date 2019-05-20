@@ -1,7 +1,7 @@
 all : main
 
 main : main.c coroutine.c
-		gcc -g -wall -o $@ $^
+		gcc -g -Wall -o $@ $^
 
 clean:
 		rm main

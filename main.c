@@ -8,7 +8,7 @@ struct args {
 static void
 foo(struct schedule * S, void *ud) {
 	struct args * args = ud;
-	int start = arg->n;
+	int start = args->n;
 	int i;
 	for(i=0; i<5; i++){
 		printf("coroutine %d : %d\n", coroutine_running(S), start + i);
@@ -18,8 +18,8 @@ foo(struct schedule * S, void *ud) {
 
 static void
 test(struct schedule * S) {
-	struct args arg1 = { 0 };
-	struct args arg2 = { 100 };
+	struct args args1 = { 0 };
+	struct args args2 = { 100 };
 
 	int co1 = coroutine_new(S, foo, &args1);
 	int co2 = coroutine_new(S, foo, &args2);

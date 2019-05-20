@@ -1,4 +1,4 @@
-#include "corountine.h"
+#include "coroutine.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <ucontext.h>
@@ -13,7 +13,7 @@ struct coroutine;
 
 struct schedule {
 	char stack[STACK_SIZE];
-	ucontext main;
+	ucontext_t main;
 	int nco;
 	int cap;
 	int running;
@@ -101,6 +101,17 @@ int coroutine_new(struct schedule *S, coroutine_func func, void *ud) {
 	return -1;
 }
 
+static void 
+mainfunc(struct schedule *S) {
+	int id = S->running;
+	struct coroutine *C = S->co[id];
+	C->func(S,C->ud);
+	_co_delete(C);
+	S->co[id] = NULL;
+	--S->nco;
+	S->running = -1;
+}
+
 void coroutine_resume(struct schedule * S, int id) {
 	assert(S->running == -1);
 	assert(id >= 0 && id < S->cap);
@@ -116,7 +127,7 @@ void coroutine_resume(struct schedule * S, int id) {
 			C->ctx.uc_link = &S->main;
 			S->running = id;
 			C->status = COROUTINE_RUNNING;
-			makecontext(&C->ctx, (void (*)(void))mainfuc, 1, S);
+			makecontext(&C->ctx, (void (*)(void))mainfunc, 1, S);
 			swapcontext(&S->main, &C->ctx);
 			break;
 		case COROUTINE_SUSPEND:
@@ -148,10 +159,10 @@ coroutine_yield(struct schedule * S) {
 	int id = S->running;
 	assert(id >= 0);
 	struct coroutine * C = S->co[id];
-	assert((cahr *)&C > S->stack);
+	assert((char *)&C > S->stack);
 	_save_stack(C, S->stack + STACK_SIZE);
 	C->status = COROUTINE_SUSPEND;
-	S->runnning = -1;
+	S->running = -1;
 	swapcontext(&C->ctx, &S->main);
 }
 

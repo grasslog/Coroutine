@@ -5,7 +5,7 @@ struct args {
 	int n;
 };
 
-static void
+static void		//测试使用的协程执行函数
 foo(struct schedule * S, void *ud) {
 	struct args * args = ud;
 	int start = args->n;
@@ -16,7 +16,7 @@ foo(struct schedule * S, void *ud) {
 	}
 }
 
-static void
+static void		//关于两个打印协程的测试用例
 test(struct schedule * S) {
 	struct args args1 = { 0 };
 	struct args args2 = { 100 };

@@ -3,4 +3,4 @@
 
 **The 'yield' statement in Python is a good example. It creates a coroutine. When the 'yield ' is encountered the current state of the function is saved and control is returned to the calling function. The calling function can then transfer execution back to the yielding function and its state will be restored to the point where the 'yield' was encountered and execution will continue.**
 
-**Show more details in blog** https://github.com/before25tofree/Coroutine
+**Show more details in blog** https://blog.csdn.net/qq_42381849/article/details/90384276
